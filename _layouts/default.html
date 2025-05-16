@@ -37,6 +37,142 @@
   {% if site.google_analytics %}
     {% include analytics.html %}
   {% endif %}
+
+ <!-- Agregar el JavaScript para Filtrar por Categorías -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const ctfLinks = document.querySelectorAll('.ctf-link');
+        const posts = document.querySelectorAll('.post-card');
+
+        ctfLinks.forEach(link => {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const category = this.getAttribute('data-category');
+            
+            // Mostrar todos los posts inicialmente
+            posts.forEach(post => {
+              post.style.display = 'block';
+            });
+
+            // Filtrar los posts según la categoría
+            posts.forEach(post => {
+              const postCategories = post.getAttribute('data-categories').split(',');
+
+              if (!postCategories.includes(category)) {
+                post.style.display = 'none';  // Ocultar el post si no pertenece a la categoría
+              }
+            });
+          });
+        });
+      });
+    </script>
+
+
+
+
+<div id="search-modal" class="hidden">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <button id="search-close">×</button>
+    <input type="text" id="search-input" placeholder="Buscar por título, categoría o tag..." />
+    <div id="search-filters">
+  <label>
+    <input type="checkbox" value="hackthebox" class="search-filter">
+    <img src="/assets/icons/hackthebox.png" class="filter-icon"> HackTheBox
+  </label>
+  <label>
+    <input type="checkbox" value="tryhackme" class="search-filter">
+    <img src="/assets/icons/tryhackme.png" class="filter-icon"> TryHackMe
+  </label>
+  <label>
+    <input type="checkbox" value="easy" class="search-filter">
+    <i class="fas fa-leaf" style="color: #28a745;"></i> Easy
+  </label>
+  <label>
+    <input type="checkbox" value="medium" class="search-filter">
+    <i class="fas fa-circle" style="color: #ffc107;"></i> Medium
+  </label>
+  <label>
+    <input type="checkbox" value="hard" class="search-filter">
+    <i class="fas fa-fire" style="color: #dc3545;"></i> Hard
+  </label>
+  <label>
+    <input type="checkbox" value="insane" class="search-filter">
+    <i class="fas fa-skull-crossbones" style="color: #343a40;"></i> Insane
+  </label>
+</div>
+
+    <ul id="search-results"></ul>
+  </div>
+</div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  let posts = [];
+
+  fetch('{{ "/search.json" | relative_url }}')
+    .then(res => res.json())
+    .then(data => posts = data);
+
+  const modal = document.getElementById("search-modal");
+  const input = document.getElementById("search-input");
+  const results = document.getElementById("search-results");
+
+  const toggleSearch = (show) => {
+    modal.classList.toggle("hidden", !show);
+    if (show) input.focus();
+  };
+
+  const performSearch = () => {
+    const query = input.value.toLowerCase();
+    const filters = Array.from(document.querySelectorAll(".search-filter:checked")).map(el => el.value);
+    const filtered = posts.filter(post => {
+      const matchQuery = post.title.toLowerCase().includes(query) ||
+                         post.categories.some(c => c.toLowerCase().includes(query)) ||
+                         post.tags.some(t => t.toLowerCase().includes(query));
+      const matchFilters = filters.length === 0 || filters.some(f => post.categories.includes(f) || post.tags.includes(f));
+      return matchQuery && matchFilters;
+    });
+
+    results.innerHTML = filtered.map(post => {
+      const tags = post.tags.map(t => `<span class="tag">${t}</span>`).join(" ");
+      return `<li><a href="${post.url}">${post.title}</a><div>${tags}</div></li>`;
+    }).join("") || "<li>No se encontraron resultados.</li>";
+  };
+
+  input.addEventListener("input", performSearch);
+  document.querySelectorAll(".search-filter").forEach(cb => cb.addEventListener("change", performSearch));
+
+  document.getElementById("search-toggle").addEventListener("click", e => {
+    e.preventDefault();
+    toggleSearch(true);
+  });
+
+  document.getElementById("search-close").addEventListener("click", () => toggleSearch(false));
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") toggleSearch(false);
+    if (e.key === "Enter" && !modal.classList.contains("hidden")) {
+      const first = results.querySelector("a");
+      if (first) window.location.href = first.href;
+    }
+  });
+
+  modal.querySelector(".search-backdrop").addEventListener("click", () => toggleSearch(false));
+});
+</script>
+
+
+
+
+{% include smooth-navigation.html %}
+
+
+
+
+
+  
 </body>
 
 </html>

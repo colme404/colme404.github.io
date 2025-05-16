@@ -1,0 +1,44 @@
+<style>
+  .fade-out { opacity: 0; transition: opacity 0.15s ease; }
+  .fade-in { opacity: 1; transition: opacity 0.15s ease; }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('a[href^="/"]').forEach(link => {
+      if (!link.classList.contains('no-intercept')) {
+        link.addEventListener('click', function (e) {
+          if (!e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+            e.preventDefault();
+            const url = this.getAttribute('href');
+            const container = document.querySelector('#main_content');
+            if (!container) {
+              window.location.href = url;
+              return;
+            }
+
+            container.classList.add('fade-out');
+
+            setTimeout(() => {
+              fetch(url)
+                .then(res => res.text())
+                .then(html => {
+                  const parser = new DOMParser();
+                  const doc = parser.parseFromString(html, 'text/html');
+                  const newContent = doc.querySelector('#main_content')?.innerHTML;
+                  if (newContent) {
+                    container.innerHTML = newContent;
+                    container.classList.remove('fade-out');
+                    container.classList.add('fade-in');
+                    window.history.pushState({}, '', url);
+                  } else {
+                    window.location.href = url;
+                  }
+                });
+            }, 150);
+          }
+        });
+      }
+    });
+  });
+</script>

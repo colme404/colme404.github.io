@@ -1,9 +1,86 @@
 ---
 layout: default
 ---
-
+<!-- _layouts/post.html -->
 <article>
-  <h2>{{ page.title }}</h2>
+  <!-- Mostrar las categorías si están definidas -->
+  {% if page.categories %}
+    <div class="post-categories">
+      <h3>
+        <i class="fas fa-folder"></i> <!-- Icono de carpeta -->
+        Categorías:
+      </h3>
+      <ul class="categories">
+        {% for category in page.categories %}
+          {% assign category_downcase = category | downcase %}
+          <li>
+            <a href="/categories/{{ category | slugify }}" class="category-link">
+              {% if category_downcase == "hackthebox" %}
+                <img src="{{ site.baseurl }}../assets/icons/hackthebox.png" alt="Hack The Box Icon" class="inline-icon">
+              {% elsif category_downcase == "tryhackme" %}
+                <img src="{{ site.baseurl }}../assets/icons/tryhackme.png" alt="TryHackMe Icon" class="inline-icon">
+              {% elsif category_downcase == "wordpress" %}
+                <img src="{{ site.baseurl }}../assets/icons/wordpress.png" alt="WordPress Icon" class="inline-icon">
+              {% elsif category_downcase == "linux" %}
+                <img src="{{ site.baseurl }}../assets/icons/linux.png" alt="Linux Icon" class="inline-icon">
+              {% elsif category_downcase == "windows" %}
+                <img src="{{ site.baseurl }}../assets/icons/windows.png" alt="Windows Icon" class="inline-icon">
+              {% elsif category_downcase contains "cve" %}
+                <i class="fas fa-exclamation-triangle" style="color: #ffcc00;"></i>
+              {% else %}
+                <i class="fas fa-folder-open"></i>
+              {% endif %}
+              {{ category }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  <!-- Mostrar las etiquetas si están definidas -->
+  {% if page.tags %}
+    <div class="post-tags">
+      <h3>
+        <i class="fas fa-tag"></i> <!-- Icono de etiqueta -->
+        Tags:
+      </h3>
+      <ul class="tags">
+        {% for tag in page.tags %}
+          {% assign tag_downcase = tag | downcase %}
+          <li>
+            <a href="/tags/{{ tag | slugify }}" class="tag-link">
+              {% if tag_downcase == "hackthebox" %}
+                <img src="{{ site.baseurl }}../assets/icons/hackthebox.png" alt="Hack The Box Icon" class="inline-icon">
+              {% elsif tag_downcase == "tryhackme" %}
+                <img src="{{ site.baseurl }}../assets/icons/tryhackme.png" alt="TryHackMe Icon" class="inline-icon">
+              {% elsif tag_downcase == "wordpress" %}
+                <img src="{{ site.baseurl }}../assets/icons/wordpress.png" alt="WordPress Icon" class="inline-icon">
+              {% elsif tag_downcase == "linux" %}
+                <img src="{{ site.baseurl }}../assets/icons/linux.png" alt="Linux Icon" class="inline-icon">
+              {% elsif tag_downcase == "windows" %}
+                <img src="{{ site.baseurl }}../assets/icons/windows.png" alt="Windows Icon" class="inline-icon">
+              {% elsif tag_downcase contains "cve" %}
+                <i class="fas fa-exclamation-triangle" style="color: #ffcc00;"></i>
+              {% else %}
+                <i class="fas fa-hashtag"></i>
+              {% endif %}
+              {{ tag }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+<br/><br/>
+  <!-- Título del post -->
+  <h1>{{ page.title }}</h1>
+
+  <!-- Fecha del post -->
   <time datetime="{{ page.date | date_to_xmlschema }}" class="by-line">{{ page.date | date_to_string }}</time>
+
+  <!-- Contenido del post -->
   {{ content }}
 </article>
+
+{% include smooth-navigation.html %}

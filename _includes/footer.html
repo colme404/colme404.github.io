@@ -7,3 +7,21 @@
     <span>© {{ currentyear }}</span>
   </a>
 </footer>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const text = document.getElementById("typewriter");
+    const fullText = text.dataset.title;
+    let index = 0;
+
+    function type() {
+      if (index < fullText.length) {
+        text.textContent += fullText.charAt(index);
+        index++;
+        setTimeout(type, 150); // velocidad de escritura
+      }
+    }
+
+    type();
+  });
+</script>

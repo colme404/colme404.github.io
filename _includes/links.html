@@ -1,3 +1,50 @@
 <a href="{{ "/archive" | prepend: site.baseurl | replace: '//', '/' }}"><h2 class="header-link">Archive</h2></a>
-<a href="{{ "/about" | prepend: site.baseurl | replace: '//', '/' }}"><h2 class="header-link">About</h2></a>
-<a href="{{ "/atom.xml" | prepend: site.baseurl | replace: '//', '/' }}"><h2 class="header-link">RSS</h2></a>
+
+<div class="dropdown">
+  <a href="#" class="header-link">CTF</a>
+  <div class="dropdown-content">
+    <a href="#" class="ctf-link" data-category="hackthebox">
+    <img src="../assets/icons/hackthebox.png" alt="Hack The Box Icon" class="dropdown-icon"> HackTheBox</a>
+    <a href="#" class="ctf-link" data-category="tryhackme">
+    <img src="../assets/icons/tryhackme.png" alt="TryHackMe Icon" class="dropdown-icon"> TryHackMe</a>
+  </div>
+</div>
+
+
+<a href="{{ "/categories" | prepend: site.baseurl | replace: '//', '/' }}"><h2 class="header-link">Categorías</h2></a>
+<a href="{{ "/tags" | prepend: site.baseurl | replace: '//', '/' }}"><h2 class="header-link">Tags</h2></a>
+
+<a href="#" id="search-toggle"><i class="fa fa-search"></i></a>
+
+
+
+
+
+
+
+<div class="social-icons">
+  <span class="tooltip">
+    <a href="https://twitter.com/CoLmEE14" target="_blank">
+      <i class="fab fa-twitter social-icon twitter-icon"></i>
+      <span class="tooltip-text">X (Twitter)</span>
+    </a>
+  </span>
+  <span class="tooltip">
+    <a href="https://www.linkedin.com/in/asier-colmenero-396350214" target="_blank">
+      <i class="fab fa-linkedin social-icon linkedin-icon"></i>
+      <span class="tooltip-text">LinkedIn</span>
+    </a>
+  </span>
+  <span class="tooltip">
+    <a href="https://github.com/colme404" target="_blank">
+      <i class="fab fa-github social-icon github-icon"></i>
+      <span class="tooltip-text">GitHub</span>
+    </a>
+  </span>
+  <span class="tooltip">
+    <a href="mailto:colmeneroasier7@protonmail.com">
+      <i class="fas fa-envelope social-icon email-icon"></i>
+      <span class="tooltip-text">Correo</span>
+    </a>
+  </span>
+</div>
